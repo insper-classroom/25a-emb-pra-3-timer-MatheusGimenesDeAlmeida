@@ -1,9 +1,3 @@
-/**
- * Exemplo adaptado do código original
- * Função: Medir distância utilizando um sensor ultrassônico
- * Licença: BSD-3-Clause
- */
-
  #include "hardware/rtc.h"
  #include "pico/util/datetime.h"
  #include "pico/stdlib.h"
@@ -15,7 +9,7 @@
  #define TRIGGER_PIN 5
  #define ECHO_PIN    15
 
- 
+
  #define TIMEOUT_MS  50
  
  typedef struct {
@@ -32,11 +26,11 @@
      if (sensor_data.aguarda_pulso) {
          datetime_t agora;
          rtc_get_datetime(&agora);
-         // Imprime mensagem de erro caso não tenha sido detectado o pulso de subida
+        
          printf("%02d:%02d:%02d - Erro: pulso não recebido\n", agora.hour, agora.min, agora.sec);
          sensor_data.aguarda_pulso = false;
      }
-     return 0; // Não repete o alarme
+     return 0; 
  }
  
  void callback_echo(uint gpio, uint32_t eventos) {
@@ -55,12 +49,11 @@
  int main() {
      stdio_init_all();
  
-     // Inicializa o RTC com data/hora base
      datetime_t tempo_inicial = {
          .year  = 2025,
          .month = 3,
          .day   = 18,
-         .dotw  = 0,   // 0 = domingo
+         .dotw  = 0,   
          .hour  = 0,
          .min   = 0,
          .sec   = 0
@@ -68,7 +61,6 @@
      rtc_init();
      rtc_set_datetime(&tempo_inicial);
  
-     // Configura os pinos do sensor
      gpio_init(TRIGGER_PIN);
      gpio_set_dir(TRIGGER_PIN, GPIO_OUT);
  
@@ -82,7 +74,6 @@
      bool medindo = false;
  
      while (true) {
-         // Verifica comando do usuário (não bloqueante)
          int ch = getchar_timeout_us(500);
          if (ch == 'm') {
              medindo = !medindo;
@@ -94,7 +85,6 @@
          }
  
          if (medindo) {
-             // Gera pulso no pino trigger
              gpio_put(TRIGGER_PIN, 1);
              sleep_us(10);
              gpio_put(TRIGGER_PIN, 0);
@@ -105,7 +95,7 @@
              if (sensor_data.pulso_fall == 1) {
                  sensor_data.pulso_fall = 0;
                  int64_t delta_us = absolute_time_diff_us(sensor_data.inicio, sensor_data.fim);
-                 double distancia = (delta_us * 0.0343) / 2.0;  // velocidade do som: 0.0343 cm/us
+                 double distancia = (delta_us * 0.0343) / 2.0;  
  
                  datetime_t agora;
                  rtc_get_datetime(&agora);
