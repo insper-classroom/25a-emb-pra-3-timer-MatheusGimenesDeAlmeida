@@ -20,8 +20,6 @@
  } sensor_data_t;
  
  volatile static sensor_data_t sensor_data = {0};
- volatile bool flag_fail;
- 
 
  void echo_callback(uint gpio, uint32_t events) {
     if (events & GPIO_IRQ_EDGE_RISE) {
@@ -92,11 +90,6 @@ int64_t alarme_timer(alarm_id_t id, void *user_data) {
  
              sensor_data.aguarda_pulso = true;
              sensor_data.alarm = add_alarm_in_ms(TIMEOUT_MS, alarme_timer, NULL, false);
-
-             if (flag_fail){
-                printf("Não leu");
-                flag_fail = false;
-             }
  
              if (sensor_data.pulso_fall == 1) {
 
