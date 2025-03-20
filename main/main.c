@@ -39,7 +39,6 @@ int64_t alarme_timer(alarm_id_t id, void *user_data) {
         rtc_get_datetime(&agora);
         printf("%02d:%02d:%02d - Erro: pulso não recebido\n", agora.hour, agora.min, agora.sec);
         sensor_data.aguarda_pulso = false;
-        flag_fail = true;
     }
     return 0;  
 }
